@@ -1,0 +1,2 @@
+# I am starting all executable names with "exec-" to git ignore them easily.
+exec-*
