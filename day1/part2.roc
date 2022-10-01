@@ -1,4 +1,4 @@
-app "exec-part1"
+app "exec-part2"
     packages { pf: "../../roc/examples/interactive/cli-platform/main.roc" }
     imports [
         pf.Program.{ Program, ExitCode },
@@ -63,6 +63,10 @@ mainTask = \inputPath ->
 
 processData : List I64 -> Nat
 processData = \data ->
-    List.map2 data (List.dropFirst data) Num.isLt
+    movingSums =
+        drop1 = (List.dropFirst data)
+        drop2 = (List.dropFirst drop1)
+        List.map3 data drop1 drop2 (\a,b,c -> a + b + c)
+    List.map2 movingSums (List.dropFirst movingSums) Num.isLt
     |> List.keepIf (\x -> x)
     |> List.len
