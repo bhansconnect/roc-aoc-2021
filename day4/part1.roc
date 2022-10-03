@@ -56,29 +56,9 @@ mainTask = \inputPath ->
             )
         when T pickedNumbers boardLists is
             T (Ok nums) (Ok boards) ->
-                boardsStr =
-                    # boards
-                    # |> List.map (\board ->
-                    #     boardData = boardRecord board
-                    #     boardStr =
-                    #         board
-                    #         |> List.map Num.toStr
-                    #         |> Str.joinWith " "
-                    #     rowscolsStr =
-                    #         boardData.rowscols
-                    #         |> List.map (\sublist ->
-                    #             sublist
-                    #             |> List.map Num.toStr
-                    #             |> Str.joinWith " "
-                    #         )
-                    #         |> Str.joinWith "\n"
-                    #     "==========\n\(boardStr)\n\n\(rowscolsStr)\n"
-                    # )
-                    # |> Str.joinWith "\n"
-                    ""
                 out = processData nums boards
                 outStr = Num.toStr out
-                Stdout.line "\(boardsStr)\(outStr)"
+                Stdout.line "\(outStr)"
             _ ->
                 Task.fail ParseError
 
