@@ -1,5 +1,5 @@
 app "exec-part2"
-    packages { pf: "../../roc/examples/interactive/cli-platform/main.roc" }
+    packages { pf: "../../roc/examples/cli/cli-platform/main.roc" }
     imports [
         pf.Program.{ Program, ExitCode },
         pf.Stdout,
