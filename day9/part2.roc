@@ -80,7 +80,7 @@ processData = \m ->
         d = down m pos
         l = left m pos
         r = right m pos
-        v = List.get m.data i |> okOrCrash 0
+        v = List.get m.data i |> okOrCrash
         v < u && v < d && v < l && v < r
     )
     |> List.map (\i -> getBasinSize m i)
@@ -102,17 +102,17 @@ getBasinHelper = \m, seen, waiting ->
     else
         last =
             List.last waiting
-            |> okOrCrash {row: 0, col: 0}
+            |> okOrCrash
         v =
             posToIndex m last
             |> (\i -> List.get m.data i)
-            |> okOrCrash 0
+            |> okOrCrash
         getNeighbors m last
         |> List.dropIf (\pos -> Set.contains seen pos)
         |> List.keepIf (\pos ->
             posToIndex m pos
             |> (\i -> List.get m.data i)
-            |> okOrCrash 0
+            |> okOrCrash
             |> (\x -> x > v && x != 9)
         )
         |> List.walk (List.dropLast waiting) List.append
@@ -149,7 +149,7 @@ up = \m, {row, col} ->
     if row > 0 then
         i = posToIndex m {row: row - 1, col}
         List.get m.data i
-        |> okOrCrash 0
+        |> okOrCrash
     else
         Num.maxU8
 
@@ -159,7 +159,7 @@ down = \m, {row, col} ->
     if row < height - 1 then
         i = posToIndex m {row: row + 1, col}
         List.get m.data i
-        |> okOrCrash 0
+        |> okOrCrash
     else
         Num.maxU8
 
@@ -168,7 +168,7 @@ left = \m, {row, col} ->
     if col > 0 then
         i = posToIndex m {row, col: col - 1}
         List.get m.data i
-        |> okOrCrash 0
+        |> okOrCrash
     else
         Num.maxU8
 
@@ -177,7 +177,7 @@ right = \m, {row, col} ->
     if col < m.width - 1 then
         i = posToIndex m {row, col: col + 1}
         List.get m.data i
-        |> okOrCrash 0
+        |> okOrCrash
     else
         Num.maxU8
 
@@ -193,14 +193,10 @@ posToIndex : Matrix, Pos -> Nat
 posToIndex = \{width}, {row, col} ->
     row * width + col
 
-okOrCrash : Result a err, a -> a
-okOrCrash = \result, dummy ->
+okOrCrash : Result a err -> a
+okOrCrash = \result ->
     when result is
         Ok a -> a
-        Err _ -> crash dummy
+        Err _ -> crash {}
 
-crash : a -> a 
-crash = \a -> crashInternal (0 - 1) a
-
-crashInternal : U8, a -> a
-crashInternal = \_, a -> a
+crash : {} -> * 

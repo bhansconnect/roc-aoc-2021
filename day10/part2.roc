@@ -44,7 +44,7 @@ mainTask = \inputPath ->
                         '}' -> CloseSquiggle
                         ')' -> CloseParen
                         '>' -> CloseTriangle
-                        _ -> crash OpenParen
+                        _ -> crash {}
                 )
             )
 
@@ -98,7 +98,7 @@ processData = \data ->
     |> (\list ->
         when List.get list (List.len list |> Num.divTrunc 2) is
             Ok x -> x
-            Err _ -> crash 0
+            Err _ -> crash {}
     )
 
 scoreClosing : List Bracket -> U64
@@ -114,7 +114,7 @@ scoreBracket = \bracket ->
         CloseSquare -> 2
         CloseSquiggle -> 3
         CloseTriangle -> 4
-        _ -> crash 0
+        _ -> crash {}
 
 processLine : List Bracket -> Result (List Bracket) [Corrupt]
 processLine = \brackets ->
@@ -127,7 +127,7 @@ processLine = \brackets ->
                 last =
                     when List.last stack is
                         Ok x -> x
-                        Err _ -> crash OpenParen
+                        Err _ -> crash {}
                 if bracket != flipBracket last then
                     Break {stack, result: Err Corrupt}
                 else
@@ -148,8 +148,4 @@ flipBracket = \bracket ->
         OpenTriangle -> CloseTriangle
         CloseTriangle -> OpenTriangle
 
-crash : a -> a 
-crash = \a -> crashInternal (0 - 1) a
-
-crashInternal : U8, a -> a
-crashInternal = \_, a -> a
+crash : {} -> * 

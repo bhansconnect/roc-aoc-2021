@@ -44,7 +44,7 @@ mainTask = \inputPath ->
                         '}' -> CloseSquiggle
                         ')' -> CloseParen
                         '>' -> CloseTriangle
-                        _ -> crash OpenParen
+                        _ -> crash {}
                 )
             )
 
@@ -95,7 +95,7 @@ processData = \data ->
             Bad CloseSquare -> 57 
             Bad CloseSquiggle -> 1197
             Bad CloseTriangle -> 25137
-            _ -> crash 0
+            _ -> crash {}
     )
     |> List.sum
 
@@ -109,7 +109,7 @@ processLine = \brackets ->
                 last =
                     when List.last stack is
                         Ok x -> x
-                        Err _ -> crash OpenParen
+                        Err _ -> crash {}
                 if bracket != flipBracket last then
                     Break {stack, result: Bad bracket}
                 else
@@ -129,8 +129,4 @@ flipBracket = \bracket ->
         OpenTriangle -> CloseTriangle
         CloseTriangle -> OpenTriangle
 
-crash : a -> a 
-crash = \a -> crashInternal (0 - 1) a
-
-crashInternal : U8, a -> a
-crashInternal = \_, a -> a
+crash : {} -> * 
